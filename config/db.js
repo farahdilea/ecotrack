@@ -1,11 +1,11 @@
 const mysql=require('mysql')
 const db=mysql.createPool({
-  host:"localhost",
-  username:"root",
-  password :"",
-  database:"ecotrack"  
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'ecotrack',
 });
 db.getConnection(()=>{
-    console.log('connet to db succefully')
+console.log('connected to db successfully');
 })
 module.exports=db;
