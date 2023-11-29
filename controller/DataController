@@ -1,0 +1,15 @@
+const dataModel=require("../models/Data")
+
+class Datacontroller{
+
+    static async getallData( req,res) {
+
+var results=await dataModel.getData();
+    
+if(results) {
+ res.send(results)
+ } 
+}
+
+}
+module.exports=Datacontroller
