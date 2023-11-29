@@ -11,5 +11,27 @@ if(results) {
  } 
 }
 
+
+static async addNewPost( req,res) {
+var id=req.body.id
+var userid=req.body.userid
+var air_Q=req.body.air_Q
+var water_Q=req.body.water_Q
+var humid=req.body.humid
+var tempr=req.body.tempr
+var winds=req.body.winds
+var sco=req.body.sco
+var resou=req.body.resou
+
+
+var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou)
+      if(x==true)  
+      res.send("added succefully")
+    else  res.send("add failed")
+    if(results) {
+     res.send(results)
+     } 
+    }
+
 }
 module.exports=Datacontroller
