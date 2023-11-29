@@ -9,6 +9,7 @@ const Datacontroller=require("../controller/DataController")
 })*/
 
  router.get("/alldata",Datacontroller.getallData) 
+ router.post("/addPost",Datacontroller.addNewPost)
 
     router.get("/allreports",reportcontroller.getallreports)
     router.post("/addreport",reportcontroller.addnewreport)
