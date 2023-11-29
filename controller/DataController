@@ -10,8 +10,6 @@ if(results) {
  res.send(results)
  } 
 }
-
-
 static async addNewPost( req,res) {
 var id=req.body.id
 var userid=req.body.userid
