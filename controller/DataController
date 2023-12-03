@@ -2,14 +2,14 @@ const dataModel=require("../models/Data")
 
 class Datacontroller{
 
-    static async getallData( req,res) {
+static async getallData( req,res) {
 
 var results=await dataModel.getData();
-    
 if(results) {
  res.send(results)
  } 
 }
+//--------------------------------------
 static async addNewPost( req,res) {
 var id=req.body.id
 var userid=req.body.userid
@@ -21,7 +21,6 @@ var winds=req.body.winds
 var sco=req.body.sco
 var resou=req.body.resou
 
-
 var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou)
       if(x==true)  
       res.send("added succefully")
@@ -30,6 +29,35 @@ var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,reso
      res.send(results)
      } 
     }
+/----------------------------------------
+static async updatePost(req,res){
+    var id=req.body.id
+    var tempr=req.body.tempr
+
+    var x=await dataModel.updatePost(id,tempr)
+      if(x==true)  
+      res.send("updated succefully")
+    else  res.send("update failed")
+    if(results) {
+     res.send(results)
+     } 
+    
+}
+//----------------------------------------------------------
+
+static async deletePost(req,res){
+    var postid=req.body.postid
+    //var userid=req.body.userid
+
+    var x=await dataModel.deletePost(postid)
+      if(x==true)  
+      res.send("Deleted succefully")
+    else  res.send("delete failed")
+    if(results) {
+     res.send(results)
+     } 
+    
+}
 
 }
 module.exports=Datacontroller
