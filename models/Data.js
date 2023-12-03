@@ -29,13 +29,30 @@ return new Promise (resolve=> { db.query("INSERT INTO posts(post_id, user_id, ai
          
 
        } )
-      })
-
-
+      })    
+} 
+//------------------------------------
     
+static async updatePost(id,tempr)
+{
+ return new Promise (resolve=> { db.query("UPDATE posts SET temp=? WHERE post_id=?",[tempr,id], (error, result) => {
+         if (!error) 
+           resolve(true)
+          else 
+           resolve(false)
+       } )
+      })
+}
+//-------------------------------------------- 
+static async deletePost(id)
+{
+  return new Promise (resolve=> { db.query("DELETE FROM posts WHERE post_id=? ",[id], (error, result) => {
+         if (!error) 
+           resolve(true)
+          else 
+           resolve(false)
+         } )
+      })
+}   
 } 
-} 
-
-
-
 module.exports=DataModel
