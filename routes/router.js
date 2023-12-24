@@ -4,7 +4,8 @@ const router=require ('express').Router();
 const Datacontroller=require("../controller/DataController") 
 const resourcescontroller= require("../controller/resourcesController")
 
-    router.get("/allResources",resourcescontroller.getallResources)
+    router.get("/allResources",resourcescontroller.getallResources) 
+    router.get("/getmyResource",resourcescontroller.getmyResource)
     router.get("/alldata",Datacontroller.getallData) 
     router.post("/addPost",Datacontroller.addNewPost)
     router.post("/updatePost",Datacontroller.updatePost)
