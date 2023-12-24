@@ -2,12 +2,9 @@ const express=require('express')
 const reportcontroller=require("../controllers/ReportsController")
 const router=require ('express').Router();
 const Datacontroller=require("../controller/DataController") 
+const resourcescontroller= require("../controller/resourcesController")
 
-/*router.get("/",(req,res,next)=>
-{
-    res.send("alaa")
-})*/
-
+    router.get("/allResources",resourcescontroller.getallResources)
     router.get("/alldata",Datacontroller.getallData) 
     router.post("/addPost",Datacontroller.addNewPost)
     router.post("/updatePost",Datacontroller.updatePost)
