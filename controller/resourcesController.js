@@ -10,6 +10,16 @@ if(result) {
     }
    
     }
-  
+    
+  static async getmyResource(req,res){
+    var topic=req.body.topic
+    
+
+    var x=await resourceModel.getmyResource(topic)
+    if(x) {
+        res.send(x)
+           }
+    
+}
 }
 module.exports=resourcesController
