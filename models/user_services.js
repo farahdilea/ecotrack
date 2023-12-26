@@ -28,8 +28,8 @@ module.exports.Updateuser = async (user_id, name, email, password, location) => 
     return rows;
 };
 
-module.exports.addUser = async (name, email, password, location) => {
-    const [result] = await db.query("INSERT INTO user (name, email, password, location) VALUES (?, ?, ?, ?)", [name, email, password, location])
+module.exports.addUser = async (name, email, password, location, type) => {
+    const [result] = await db.query("INSERT INTO user (name, email, password, location, type) VALUES (?, ?, ?, ?, ?)", [name, email, password, location,type])
         .catch(err => {
             console.error(err);
             throw err;
@@ -58,46 +58,57 @@ module.exports.getUserByEmail = async (email) => {
     return rows[0]; // Assuming email is unique, so there should be at most one user
 };
 
-module.exports.checkEnvironmentalAlerts = async () => {
+module.exports.checkEnvironmentalAlerts = async (userId) => {
     try {
-        console.log('Checking environmental alerts for all users.');
+        console.log(`Checking environmental alerts for a specific user (user_id=${userId}).`);
 
-        // Get all users and their alert thresholds
-        const [interests] = await db.query("SELECT * FROM interests");
+        // Get the user's interest and threshold
+        const [userInterest] = await db.query("SELECT user_id, name, threshold FROM interests WHERE user_id = ?", [userId]);
 
-        // Iterate over each user
-        for (const interest of interests) {
-            const { user_id, name, threshold } = interest;
+        if (!userInterest || userInterest.length === 0) {
+            console.log('No user interest found.');
+            return;
+        }
 
-            // Log the SQL query
-            console.log('SQL Query:', "SELECT * FROM posts WHERE user_id = ? AND temp < ?", [user_id, threshold]);
+        const { user_id, name: interestName, threshold } = userInterest[0];
 
-            // Get all environmental data below the user's threshold
-            const [belowThresholdData] = await db.query("SELECT * FROM posts WHERE user_id = ? AND temp < ?", [user_id, threshold]);
+        // Initialize processed post IDs for the current user
+        const processedPostIds = new Set();
 
-            // Log the belowThresholdData array
-            console.log('belowThresholdData:', belowThresholdData);
+        // Log the SQL query
+        const sqlQuery = `SELECT user_id, ${interestName} FROM posts WHERE ?? < ?`;
+        console.log('SQL Query:', sqlQuery);
 
-            if (belowThresholdData.length > 0) {
-                // Generate environmental alert for the user
-                const alertMessage = `Environmental Alert: User ${user_id} (${name}) - Data below threshold (${threshold})`;
-                console.log(alertMessage);
+        // Get posts with values below the user's threshold based on the name column
+        const [belowThresholdData] = await db.query(sqlQuery, [`${interestName}`, threshold]);
 
-                // Insert all data below threshold into the environmental_alerts table
-                for (const data of belowThresholdData) {
-                    await db.query(
-                        "INSERT INTO environmental_alerts (user_id, name, threshold, alert_message, alert_data) VALUES (?, ?, ?, ?, ?)",
-                        [user_id, name, threshold, alertMessage, JSON.stringify(data)]
-                    );
-                }
+        // Log the belowThresholdData array
+        console.log('belowThresholdData:', belowThresholdData);
 
-                console.log('Alerts inserted successfully.');
+        // Filter out already processed post IDs
+        const newBelowThresholdData = belowThresholdData.filter(data => !processedPostIds.has(data.post_id));
 
-                // You can send a notification or take any other action here
-                // For example, you might want to send an email or push notification to the user
-            } else {
-                console.log('No data below threshold found for User', user_id);
+        if (newBelowThresholdData.length > 0) {
+            // Generate environmental alert for the user's interest
+            const alertMessage = `Environmental Alert: User ${user_id} - Interest ${interestName} - Data below threshold (${threshold})`;
+
+            // Insert new data below threshold into the environmental_alerts table
+            for (const data of newBelowThresholdData) {
+                await db.query(
+                    "INSERT INTO environmental_alerts (user_id, name, threshold, alert_message, alert_data) VALUES (?, ?, ?, ?, ?)",
+                    [user_id, interestName, threshold, alertMessage, JSON.stringify(data)]
+                );
+
+                // Add processed post ID to the set
+                processedPostIds.add(data.post_id);
             }
+
+            console.log('Alerts inserted successfully.');
+
+            // You can send a notification or take any other action here
+            // For example, you might want to send an email or push notification to the user
+        } else {
+            console.log(`No new data below threshold found for User ${user_id} - Interest ${interestName} (${threshold})`);
         }
     } catch (error) {
         console.error('Error in checkEnvironmentalAlerts:', error);
