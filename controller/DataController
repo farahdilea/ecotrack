@@ -19,9 +19,9 @@ var humid=req.body.humid
 var tempr=req.body.tempr
 var winds=req.body.winds
 var sco=req.body.sco
-var resou=req.body.resou
-
-var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou)
+var location=req.body.location
+ 
+var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou,location)
       if(x==true)  
       res.send("added succefully")
     else  res.send("add failed")
