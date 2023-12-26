@@ -70,7 +70,7 @@ class DataModel {
     
 static async updatePost(id,tempr)
 {
- return new Promise (resolve=> { db.query("UPDATE posts SET temp_C°=? WHERE post_id=?",[tempr,id], (error, result) => {
+ return new Promise (resolve=> { db.query("UPDATE posts SET temp_C=? WHERE post_id=?",[tempr,id], (error, result) => {
             if (!error) 
            resolve(true)
           else 
