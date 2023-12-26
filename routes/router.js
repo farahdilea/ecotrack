@@ -9,7 +9,7 @@ const resourcescontroller= require("../controller/resourcesController")
     router.get("/alldata",Datacontroller.getallData) 
     router.post("/addPost",Datacontroller.addNewPost)
     router.post("/updatePost",Datacontroller.updatePost)
-    router.post("/deletePost",Datacontroller.deletePost)
+    router.delete("/deletePost",Datacontroller.deletePost)
 //-------------------------------------------------------------
     router.get("/allreports",reportcontroller.getallreports)
     router.post("/addreport",reportcontroller.addnewreport)
