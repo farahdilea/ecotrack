@@ -20,7 +20,7 @@ class DataModel {
     
     static async addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou){
 
-return new Promise (resolve=> { db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp, wind_speed, score, resource,location)VALUES (?,?,?,?,?,?,?,?,?,?)",
+return new Promise (resolve=> { db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp_C°, wind_speed, score, resource, location)VALUES (?,?,?,?,?,?,?,?,?,?)",
 [id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou,location], (error, result) => {
          if (!error) 
            resolve(true)
