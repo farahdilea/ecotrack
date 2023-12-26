@@ -63,7 +63,7 @@ class DataModel {
         } catch (error) {
             throw new Error(error.message);
         }
-   }
+    }
 
     
 //------------------------------------
