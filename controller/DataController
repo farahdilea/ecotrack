@@ -11,17 +11,17 @@ if(results) {
 }
 //--------------------------------------
 static async addNewPost( req,res) {
-var id=req.body.id
-var userid=req.body.userid
-var air_Q=req.body.air_Q
-var water_Q=req.body.water_Q
-var humid=req.body.humid
-var tempr=req.body.tempr
-var winds=req.body.winds
-var sco=req.body.sco
+var id=req.body.post_id
+var userid=req.body.user_id
+var air_Q=req.body.air_quality
+var water_Q=req.body.water_quality
+var humid=req.body.humidity
+var tempr=req.body.temp_C
+var winds=req.body.wind_speed
+var resou=req.body.resource
 var location=req.body.location
  
-var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou,location)
+var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,resou,location)
       if(x==true)  
       res.send("added succefully")
     else  res.send("add failed")
@@ -29,7 +29,7 @@ var x=await dataModel.addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,reso
      res.send(results)
      } 
     }
-/----------------------------------------
+//----------------------------------------
 static async updatePost(req,res){
     var id=req.body.id
     var tempr=req.body.tempr
