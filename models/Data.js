@@ -18,19 +18,54 @@ class DataModel {
       }
     } 
     
-    static async addData(id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou){
+    static async addData(id, userid, air_Q, water_Q, humid, tempr, winds, resou, location) {
+        try {
+            const userScore = await new Promise((resolve, reject) => {
+                db.query("SELECT score FROM user WHERE user_id = ?", [userid], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (result && result.length > 0 && result[0].score !== undefined) {
+                            resolve(result[0].score);
+                        } else {
+                            reject(new Error("Score not found for the user."));
+                        }
+                    }
+                });
+            });
+    
+            const updatedScore = userScore + 1;
+    
+            await new Promise((resolve, reject) => {
+                db.query("UPDATE user SET score = ? WHERE user_id = ?", [updatedScore, userid], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                });
+            });
+    
+            const insertResult = await new Promise((resolve, reject) => {
+                db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp_C, wind_speed, resource, location) VALUES (?,?,?,?,?,?,?,?,?)",
+                    [id, userid, air_Q, water_Q, humid, tempr, winds, resou, location], (error, result) => {
+                        if (!error) {
+                            resolve(true);
+                        } else {
+                            reject(error);
+                        }
+                    }
 
-return new Promise (resolve=> { db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp_C°, wind_speed, score, resource, location)VALUES (?,?,?,?,?,?,?,?,?,?)",
-[id,userid,air_Q,water_Q,humid,tempr,winds,sco,resou,location], (error, result) => {
-         if (!error) 
-           resolve(true)
-          else 
-           resolve(false)
-         
+                );
+            });
+    
+            return insertResult;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+   }
 
-       } )
-      })    
-} 
+    
 //------------------------------------
     
 static async updatePost(id,tempr)
