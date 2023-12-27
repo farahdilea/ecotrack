@@ -21,5 +21,22 @@ if(result) {
            }
     
 }
+    static async addResource(req,res){
+
+var  research_id=req.body.research_id
+var  userid=req.body.userid
+var topic =req.body.topic
+var links=req.body.links
+var desc = req.body.desc
+
+var x=await resourceModel.addResource(research_id,userid,topic,links,desc)
+      if(x==true)  
+      res.send("added succefully")
+    else  res.send("add failed")
+    if(results) {
+     res.send(results)
+     } 
+}
+
 }
 module.exports=resourcesController
