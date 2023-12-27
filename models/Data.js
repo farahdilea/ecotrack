@@ -18,7 +18,7 @@ class DataModel {
       }
     } 
     
-    static async addData(id, userid, air_Q, water_Q, humid, tempr, winds, resou, location) {
+    static async addData(id, userid, air_Q, water_Q, humid, tempr, winds, resou, location,date) {
         try {
             const userScore = await new Promise((resolve, reject) => {
                 db.query("SELECT score FROM user WHERE user_id = ?", [userid], (error, result) => {
@@ -47,7 +47,7 @@ class DataModel {
             });
     
             const insertResult = await new Promise((resolve, reject) => {
-                db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp_C, wind_speed, resource, location) VALUES (?,?,?,?,?,?,?,?,?)",
+                db.query("INSERT INTO posts(post_id, user_id, air_quality, water_quality, humidity, temp_C, wind_speed, resource, location,date) VALUES (?,?,?,?,?,?,?,?,?,?)",
                     [id, userid, air_Q, water_Q, humid, tempr, winds, resou, location], (error, result) => {
                         if (!error) {
                             resolve(true);
