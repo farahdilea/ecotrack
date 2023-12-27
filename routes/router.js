@@ -7,6 +7,7 @@ const resourcescontroller= require("../controller/resourcesController")
 
     router.get("/allResources",resourcescontroller.getallResources) 
     router.get("/getmyResource",resourcescontroller.getmyResource)
+    router.post("/addResource",resourcescontroller.addResource)
 //------------------------------------------------------------
     router.get("/alldata",Datacontroller.getallData) 
    router.post("/addData",Datacontroller.addNewPost)
